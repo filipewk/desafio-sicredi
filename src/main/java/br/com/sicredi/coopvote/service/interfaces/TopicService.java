@@ -1,5 +1,7 @@
 package br.com.sicredi.coopvote.service.interfaces;
 
+import br.com.sicredi.coopvote.dto.TopicDto;
+
 public interface TopicService {
-    void createTopic();
+  TopicDto createTopic(TopicDto topic);
 }

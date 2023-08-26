@@ -1,5 +1,6 @@
 package br.com.sicredi.coopvote.architecture;
 
+import br.com.sicredi.coopvote.controller.BaseController;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -25,5 +26,7 @@ public class ControllerTest {
           .should()
           .beAnnotatedWith(RestController.class)
           .andShould()
-          .resideInAPackage("..controller..");
+          .resideInAPackage("..controller..")
+          .andShould()
+          .beAssignableTo(BaseController.class);
 }
