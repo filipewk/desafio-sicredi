@@ -1,6 +1,6 @@
 package br.com.sicredi.coopvote.controller;
 
-import br.com.sicredi.coopvote.dto.ApiResponse;
+import br.com.sicredi.coopvote.record.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -11,9 +11,9 @@ public abstract class BaseController {
 
   @Autowired private MessageSource messageSource;
 
-  public <T> ResponseEntity<ApiResponse<T>> createdResponse(T data) {
+  public <T> ResponseEntity<ApiResult<T>> createdResponse(T data) {
     var response =
-        new ApiResponse<>(HttpStatus.CREATED.value(), getMessage("response.api.created"), data);
+        new ApiResult<>(HttpStatus.CREATED.value(), getMessage("response.api.created"), data);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
