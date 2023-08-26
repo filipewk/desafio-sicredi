@@ -1,0 +1,19 @@
+version: "3"
+
+networks:
+  dev-network:
+    driver: bridge
+
+services:
+  coopvote_db:
+    image: postgres:15.1
+    container_name: coopvote_db
+    networks:
+      - dev-network
+    restart: always
+    environment:
+      - POSTGRES_DB=coopvote_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5432:5432
