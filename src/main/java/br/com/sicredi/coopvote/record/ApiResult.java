@@ -1,3 +1,7 @@
 package br.com.sicredi.coopvote.record;
 
-public record ApiResult<T>(int status, String message, T content) {}
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
+public record ApiResult<T>(boolean error, int status, String message, T content) {}

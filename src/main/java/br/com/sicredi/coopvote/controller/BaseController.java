@@ -11,9 +11,16 @@ public abstract class BaseController {
 
   @Autowired private MessageSource messageSource;
 
-  public <T> ResponseEntity<ApiResult<T>> createdResponse(T data) {
+  public <T> ResponseEntity<ApiResult<T>> created(T data) {
     var response =
-        new ApiResult<>(HttpStatus.CREATED.value(), getMessage("response.api.created"), data);
+        new ApiResult<>(
+            false, HttpStatus.CREATED.value(), getMessage("response.api.created"), data);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  }
+
+  public <T> ResponseEntity<ApiResult<T>> ok(T data) {
+    var response =
+        new ApiResult<>(false, HttpStatus.OK.value(), getMessage("response.api.ok"), data);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
