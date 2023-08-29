@@ -1,5 +1,9 @@
 # Sistema de Votação
 
+Para rodar o projeto, é necessário executar o seguinte comando:
+```bash 
+docker-compose up -d
+```
 Este projeto é um serviço RESTful dedicado a gerenciar tópicos de votação, registrar votos e exibir os resultados das sessões de votação.
 
 ## Controladores
