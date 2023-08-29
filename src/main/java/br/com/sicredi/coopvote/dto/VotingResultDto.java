@@ -1,5 +1,6 @@
 package br.com.sicredi.coopvote.dto;
 
+import br.com.sicredi.coopvote.enums.VotingResultEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,5 +11,5 @@ public class VotingResultDto {
   private Integer totalVotes;
   private Integer yesVotes;
   private Integer noVotes;
-  private String result;
+  private VotingResultEnum result;
 }

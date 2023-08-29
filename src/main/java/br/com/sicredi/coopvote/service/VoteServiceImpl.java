@@ -58,6 +58,6 @@ public class VoteServiceImpl implements VoteService {
   private VotingSession getVotingSession(Long votingSessionId) {
     return votingSessionRepository
         .findById(votingSessionId)
-        .orElseThrow(() -> new NotFoundException("voting.session.not.found", votingSessionId));
+        .orElseThrow(() -> new NotFoundException("voting.session.notFound", votingSessionId));
   }
 }

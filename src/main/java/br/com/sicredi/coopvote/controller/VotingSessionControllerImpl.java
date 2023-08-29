@@ -26,7 +26,7 @@ public class VotingSessionControllerImpl extends BaseController implements Votin
   }
 
   @Override
-  @PostMapping("{topicId}")
+  @PostMapping("topic/{topicId}")
   @Operation(summary = "Open a voting session", responses = @ApiResponse(responseCode = "200"))
   public ResponseEntity<ApiResult<VotingSessionDto>> createTopic(
       @PathVariable Long topicId,

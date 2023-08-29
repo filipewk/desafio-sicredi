@@ -1,5 +1,7 @@
 package br.com.sicredi.coopvote.dto.projetion;
 
+import br.com.sicredi.coopvote.enums.VotingResultEnum;
+
 public interface VotingResultProjection {
   Long getSessionId();
 
@@ -9,5 +11,5 @@ public interface VotingResultProjection {
 
   Integer getNoVotes();
 
-  String getResult();
+  VotingResultEnum getResult();
 }
