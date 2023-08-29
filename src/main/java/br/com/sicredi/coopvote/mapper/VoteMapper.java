@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 public interface VoteMapper {
 
   @Mapping(source = "votingSessionId", target = "votingSession.id")
+  @Mapping(target = "id", ignore = true)
   Vote toEntity(VoteDto dto);
 
   @Mapping(source = "votingSession.id", target = "votingSessionId")

@@ -14,4 +14,5 @@ public class Constants {
   public static final String URI_VALUE = "URI";
   public static final String AND_KEY = " | ";
   public static final String EQUALS_KEY = "=";
+  public static final long ONE_MINUTE_IN_MILLISECONDS = 60000L;
 }
