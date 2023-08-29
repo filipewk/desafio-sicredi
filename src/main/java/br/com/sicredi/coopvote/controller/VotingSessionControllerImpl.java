@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("session")
+@RequestMapping("sessions")
 public class VotingSessionControllerImpl extends BaseController implements VotingSessionController {
 
   private final VotingSessionService votingSessionService;

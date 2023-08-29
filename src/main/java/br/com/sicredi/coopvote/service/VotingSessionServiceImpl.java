@@ -41,7 +41,7 @@ public class VotingSessionServiceImpl implements VotingSessionService {
   private Topic getTopicById(Long topicId) {
     return topicRepository
         .findById(topicId)
-        .orElseThrow(() -> new NotFoundException("topic.not.found", topicId));
+        .orElseThrow(() -> new NotFoundException("topic.notFound", topicId));
   }
 
   private VotingSessionDto createVotingSession(Topic topic, int durationMinutes) {

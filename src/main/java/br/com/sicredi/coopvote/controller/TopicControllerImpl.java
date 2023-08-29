@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("topic")
+@RequestMapping("topics")
 public class TopicControllerImpl extends BaseController implements TopicController {
 
   private final TopicService topicService;

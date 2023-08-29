@@ -5,6 +5,5 @@ import br.com.sicredi.coopvote.record.ApiResult;
 import org.springframework.http.ResponseEntity;
 
 public interface VotingSessionController {
-
   ResponseEntity<ApiResult<VotingSessionDto>> createTopic(Long topicId, Integer durationMinutes);
 }
