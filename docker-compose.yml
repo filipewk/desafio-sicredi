@@ -17,3 +17,13 @@ services:
       - POSTGRES_PASSWORD=123456
     ports:
       - 5432:5432
+
+  vote-rabbit:
+    image: rabbitmq:3-management
+    container_name: vote-rabbit
+    networks:
+      - dev-network
+    ports:
+      - 5672:5672
+      - 25676:25676
+      - 15672:15672

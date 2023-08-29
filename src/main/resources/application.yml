@@ -24,3 +24,18 @@ spring:
   flyway:
     locations: classpath:db/migration
     schemas: dev
+
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST:localhost}
+    port: ${RABBIT_MQ_PORT:5672}
+    username: ${RABBIT_MQ_USER:guest}
+    password: ${RABBIT_MQ_PASSWORD:guest}
+
+app-config:
+  rabbit:
+    exchange:
+      vote: vote.topic
+    routingKey:
+      vote: vote-update.routingKey
+    queue:
+      vote: vote-update.queue
