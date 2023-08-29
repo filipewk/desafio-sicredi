@@ -1,8 +1,13 @@
 package br.com.sicredi.coopvote.dto.projetion;
 
 import br.com.sicredi.coopvote.enums.VotingResultEnum;
+import br.com.sicredi.coopvote.enums.VotingSessionStatusEnum;
 
 public interface VotingResultProjection {
+  Long getTopicId();
+
+  String getTopicDescription();
+
   Long getSessionId();
 
   Integer getTotalVotes();
@@ -12,4 +17,6 @@ public interface VotingResultProjection {
   Integer getNoVotes();
 
   VotingResultEnum getResult();
+
+  VotingSessionStatusEnum getVotingSessionStatus();
 }
