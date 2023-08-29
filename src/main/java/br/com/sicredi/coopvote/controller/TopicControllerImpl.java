@@ -26,15 +26,7 @@ public class TopicControllerImpl extends BaseController implements TopicControll
 
   @Override
   @PostMapping
-  @Operation(summary = "Create a new topic")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "201", description = "Create a new topic"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid params supplied",
-            content = @Content)
-      })
+  @Operation(summary = "Create a new topic", responses = @ApiResponse(responseCode = "201"))
   public ResponseEntity<ApiResult<TopicDto>> createTopic(@RequestBody TopicDto topic) {
     TopicDto createdTopic = topicService.createTopic(topic);
     return created(createdTopic);

@@ -27,6 +27,7 @@ public class VoteServiceImpl implements VoteService {
     this.voteMapper = voteMapper;
   }
 
+  @Override
   @Transactional
   public VoteDto castVote(VoteDto vote) {
     validateVoteCanBeCast(vote);

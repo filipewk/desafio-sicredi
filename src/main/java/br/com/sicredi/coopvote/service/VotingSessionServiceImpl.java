@@ -2,6 +2,7 @@ package br.com.sicredi.coopvote.service;
 
 import br.com.sicredi.coopvote.domain.Topic;
 import br.com.sicredi.coopvote.domain.VotingSession;
+import br.com.sicredi.coopvote.dto.VotingResultDto;
 import br.com.sicredi.coopvote.dto.VotingSessionDto;
 import br.com.sicredi.coopvote.exception.NotFoundException;
 import br.com.sicredi.coopvote.mapper.VotingSessionMapper;
@@ -17,8 +18,6 @@ public class VotingSessionServiceImpl implements VotingSessionService {
   private final VotingSessionRepository votingRepository;
   private final VotingSessionMapper votingSessionMapper;
 
-  private static final int DEFAULT_DURATION_MINUTES = 1;
-
   public VotingSessionServiceImpl(
       TopicRepository topicRepository,
       VotingSessionRepository votingRepository,
@@ -28,14 +27,16 @@ public class VotingSessionServiceImpl implements VotingSessionService {
     this.votingSessionMapper = votingSessionMapper;
   }
 
+  @Override
   public VotingSessionDto openSession(Long topicId, Integer durationMinutes) {
-    var effectiveDuration = getEffectiveDuration(durationMinutes);
     var topic = getTopicById(topicId);
-    return createVotingSession(topic, effectiveDuration);
+    return createVotingSession(topic, durationMinutes);
   }
 
-  private int getEffectiveDuration(Integer durationMinutes) {
-    return (durationMinutes == null) ? DEFAULT_DURATION_MINUTES : durationMinutes;
+  @Override
+  public VotingResultDto sessionResult(Long sessionId) {
+    var sessionResult = votingRepository.getVotingResult(sessionId);
+    return votingSessionMapper.projectionToDto(sessionResult);
   }
 
   private Topic getTopicById(Long topicId) {
