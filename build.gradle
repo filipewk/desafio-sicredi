@@ -41,6 +41,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.0.0'
+    testImplementation 'org.projectlombok:lombok:1.18.28'
+    testImplementation 'com.h2database:h2:2.2.220'
 }
 
 test {
@@ -53,6 +55,21 @@ jacoco {
 
 jacocoTestReport {
     dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "**/dto/*",
+                    "**/domain/*",
+                    "**/mapper/*",
+                    "**/config/*",
+                    "**/record/*",
+                    "**/interceptor/*",
+                    "**/util/*",
+                    "br/com/sicredi/coopvote/exception/handler/*",
+                    "br/com/sicredi/coopvote/CoopvoteApplication.class"
+            ])
+        }))
+    }
 }
 
 spotless {
