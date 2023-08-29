@@ -27,3 +27,21 @@ services:
       - 5672:5672
       - 25676:25676
       - 15672:15672
+
+  coopvote-api:
+    build: .
+    container_name: coopvote-api
+    networks:
+      - dev-network
+    depends_on:
+      - coopvote_db
+      - vote-rabbit
+    environment:
+      - PORT=8080
+      - DB_HOST=coopvote_db
+      - DB_NAME=coopvote_db
+      - DB_USER=admin
+      - DB_PASSWORD=123456
+      - DB_PORT=5432
+    ports:
+      - 8080:8080
