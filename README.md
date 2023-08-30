@@ -113,6 +113,61 @@ Este projeto é um serviço RESTful dedicado a gerenciar tópicos de votação, 
 
 O sistema possui uma rotina de atualização programada para sessões de votação que já expiraram. Esta rotina calcula os resultados e utiliza o RabbitMQ para enviar mensagens com os resultados das votações.
 
+## Versionamento de Banco de Dados com Flyway
+
+Utilizamos o Flyway para gerenciar e versionar os scripts de banco de dados. Os scripts estão localizados no diretório `classpath:db/migration`.
+
+### Migrations:
+
+#### V1 - Criação da tabela de tópicos
+
+Arquivo: `db/migration/V1__create_topic_table.sql`:
+
+```sql
+CREATE TABLE TOPIC (
+  ID BIGSERIAL PRIMARY KEY,
+  DESCRIPTION VARCHAR(255) NOT NULL
+);
+```
+#### V2 - Criação da tabela de sessões de votação
+
+Arquivo: db/migration/V1__create_topic_table.sql:
+
+```sql
+CREATE TABLE VOTING_SESSION (
+  ID BIGSERIAL PRIMARY KEY,
+  ID_TOPIC BIGSERIAL NOT NULL,
+  OPENING_DATE TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  DURATION_MINUTES INTEGER,
+  IS_OPEN BOOLEAN DEFAULT TRUE,
+  FOREIGN KEY (ID_TOPIC) REFERENCES TOPIC(id)
+);
+```
+#### V3 - Criação da tabela de votos
+
+Arquivo: db/migration/V3__create_vote_table.sql:
+
+```sql
+CREATE TABLE VOTE (
+    ID BIGSERIAL PRIMARY KEY,
+    ID_VOTING_SESSION BIGSERIAL NOT NULL,
+    ID_MEMBER BIGINT NOT NULL,
+    VOTE_VALUE VARCHAR(3) NOT NULL,
+    FOREIGN KEY (ID_VOTING_SESSION) REFERENCES VOTING_SESSION(id)
+);
+```
+#### V4 - Adição de colunas na tabela de tópicos
+
+Arquivo: db/migration/V4__insert_columns_topic_table.sql:
+
+```sql
+ALTER TABLE TOPIC
+ADD COLUMN VOTE_DIFFERENCE INT DEFAULT 0;
+
+ALTER TABLE TOPIC
+ADD COLUMN VOTING_RESULT VARCHAR(255);
+```
+
 ## Logs do Sistema
 
 O sistema implementa um mecanismo de registro de logs robusto para garantir transparência e rastreabilidade das operações. Abaixo, temos uma descrição de como os logs são apresentados no sistema:
