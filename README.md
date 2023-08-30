@@ -16,7 +16,6 @@ Este projeto é um serviço RESTful dedicado a gerenciar tópicos de votação, 
     - **Payload**:
       ```json
       {
-        "id": 0,
         "description": "string"
       }
       ```
