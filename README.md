@@ -109,19 +109,30 @@ Este projeto é um serviço RESTful dedicado a gerenciar tópicos de votação, 
 - **Voto (`Vote`)**: Representa um voto.
 - **Sessão de Votação (`VotingSession`)**: Representa uma sessão de votação.
 
-## Agendamentos
+## Agendamentos e Uso do RabbitMQ
 
-O sistema possui uma rotina de atualização programada para sessões de votação que já expiraram. Esta rotina calcula os resultados e utiliza o RabbitMQ para enviar mensagens com os resultados das votações.
+O sistema possui uma rotina programada de atualização para sessões de votação que já expiraram. Após calcular os resultados, ele usa o RabbitMQ para enviar mensagens contendo esses resultados.
 
-## Versionamento de Banco de Dados com Flyway
+O RabbitMQ funciona como um broker de mensagens, permitindo que sistemas se comuniquem entre si através de mensagens. No contexto deste sistema:
 
-Utilizamos o Flyway para gerenciar e versionar os scripts de banco de dados. Os scripts estão localizados no diretório `classpath:db/migration`.
+- **Exchange (`vote.topic`)**: É o mecanismo que recebe as mensagens e as distribui para as filas apropriadas com base em regras de roteamento. Neste caso, estamos usando uma `exchange` do tipo `topic`, identificada pelo nome `vote.topic`.
 
-### Migrations:
+- **Queue (`vote-update.queue`)**: É onde as mensagens são mantidas até serem processadas por um consumidor. Neste sistema, a fila para mensagens de atualização de votação é nomeada como `vote-update.queue`.
 
-#### V1 - Criação da tabela de tópicos
+- **Routing Key (`vote-update.routingKey`)**: A chave de roteamento é usada pela `exchange` para decidir para qual fila a mensagem deve ser enviada. Aqui, a chave usada é `vote-update.routingKey`.
 
-Arquivo: `db/migration/V1__create_topic_table.sql`:
+Deste modo, quando uma sessão de votação expira, uma mensagem é enviada para a `exchange` `vote.topic`, que por sua vez, com base na chave de roteamento, direciona a mensagem para a fila `vote-update.queue` onde pode ser consumida por um componente ou sistema subsequente.
+
+
+## Gerenciamento e Versionamento de Banco de Dados com Flyway
+
+O Flyway é uma ferramenta que nos permite gerenciar, versionar e aplicar migrações de banco de dados de uma forma controlada e sistemática. Com o Flyway, mantemos uma sequência de scripts SQL (migrações) em uma pasta específica, onde cada script altera o banco de dados de alguma maneira. Cada script é versionado, o que nos permite rastrear quais migrações foram aplicadas e quando.
+
+A estrutura padrão que o Flyway utiliza é a pasta `classpath:db/migration` para armazenar os scripts.
+
+### Exemplo de Script de Migração:
+
+Localizado em `db/migration/V1__create_topic_table.sql`, este script cria a tabela `TOPIC`:
 
 ```sql
 CREATE TABLE TOPIC (
@@ -129,44 +140,7 @@ CREATE TABLE TOPIC (
   DESCRIPTION VARCHAR(255) NOT NULL
 );
 ```
-#### V2 - Criação da tabela de sessões de votação
-
-Arquivo: db/migration/V1__create_topic_table.sql:
-
-```sql
-CREATE TABLE VOTING_SESSION (
-  ID BIGSERIAL PRIMARY KEY,
-  ID_TOPIC BIGSERIAL NOT NULL,
-  OPENING_DATE TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  DURATION_MINUTES INTEGER,
-  IS_OPEN BOOLEAN DEFAULT TRUE,
-  FOREIGN KEY (ID_TOPIC) REFERENCES TOPIC(id)
-);
-```
-#### V3 - Criação da tabela de votos
-
-Arquivo: db/migration/V3__create_vote_table.sql:
-
-```sql
-CREATE TABLE VOTE (
-    ID BIGSERIAL PRIMARY KEY,
-    ID_VOTING_SESSION BIGSERIAL NOT NULL,
-    ID_MEMBER BIGINT NOT NULL,
-    VOTE_VALUE VARCHAR(3) NOT NULL,
-    FOREIGN KEY (ID_VOTING_SESSION) REFERENCES VOTING_SESSION(id)
-);
-```
-#### V4 - Adição de colunas na tabela de tópicos
-
-Arquivo: db/migration/V4__insert_columns_topic_table.sql:
-
-```sql
-ALTER TABLE TOPIC
-ADD COLUMN VOTE_DIFFERENCE INT DEFAULT 0;
-
-ALTER TABLE TOPIC
-ADD COLUMN VOTING_RESULT VARCHAR(255);
-```
+Nesse exemplo, o prefixo V1__ indica a versão da migração. O Flyway garantirá que os scripts sejam executados em ordem e apenas uma vez. Conforme o banco de dados evolui, novos scripts são adicionados a esse diretório e, quando o Flyway é executado, ele aplica as migrações em sequência.
 
 ## Logs do Sistema
 
